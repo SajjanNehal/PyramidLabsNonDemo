@@ -1,0 +1,584 @@
+{% extends "base.html" %}
+{% load static from staticfiles %}
+{% block add_styles %}
+    .chart {height: 300px}
+    .status .panel {min-height: 140px;background-color: #f5f5f5;}
+    #punchcard {height: 350px}
+{% endblock %}
+{% block content %}
+    <!--
+    {% if request.user.is_superuser %}
+        <h3>Team Dashboard</h3>
+    {% else %}
+        <h3>Dashboard for {{ request.user.get_full_name }}</h3>
+    {% endif %}
+  -->
+    <div class="row">
+        <!-- /.col-lg-6 -->
+        <div class="col-lg-12 col-sm-12 ip-address-box text-center">
+              <div class="form-group">
+                  <div class="col-sm-6 col-sm-offset-3"><input type="text" class="form-control" placeholder="IP address"></div>
+              </div>
+            <br><br>
+              <button type="button" class="btn btn-primary">Vuln Scan</button>
+              <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">Quick Pentest</button>
+              <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Scheduled Scan
+              <span class="caret"></span></button>
+              <ul class="dropdown-menu">
+                <li><a href="#">Every Day</a></li>
+                <li><a href="#">Weekly</a></li>
+                <li><a href="#">Bi-Weekly</a></li>
+                <li><a href="#">Monthly</a></li>
+              </ul>
+        </div>
+        <!-- /.col-lg-6 -->
+    </div>
+    <div class="row">
+        <div class="col-lg-3 col-sm-3">
+            <div class="panel panel-default box">
+              <div class="panel-heading text-center">
+                  <h2>Risk Level</h2>
+              </div>
+              <div class="panel-body">
+                  <h2><small>Bugs Found:</small> 15</h2>
+                  <h2><small>Bugs Closed:</small> 2</h2>
+                  <h4><small>Warnings: </small> 60</h4>
+                  <h4 class="text-primary">+5.2% ($456)</h4>
+              </div>
+              <div class="panel-footer">
+                <div class="progress progress-success">
+                                    <div class="progress-bar" role="progressbar" style="width: 45%" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                <div class="progress">
+                    <div class="progress-bar progress-bar-medium" aria-valuenow="30"
+  aria-valuemin="0" aria-valuemax="100" role="progressbar" style="width:30%">
+                    Medium 30%
+                  </div>
+                </div>
+                <div class="progress">
+                    <div class="progress-bar progress-bar-warning" aria-valuenow="70"
+  aria-valuemin="0" aria-valuemax="100" role="progressbar" style="width:70%">
+                    High 70%
+                  </div>
+                </div>
+                <div class="progress">
+                    <div class="progress-bar progress-bar-danger" aria-valuenow="90"
+  aria-valuemin="0" aria-valuemax="100" role="progressbar" style="width:90%">
+                    Danger 90%
+                  </div>
+                </div>
+              </div>
+            </div>
+        </div>
+        <div class="col-lg-9 col-sm-9">
+            <div class="panel panel-default box">
+              <div class="panel-heading text-center">
+                  <h2>Findings</h2>
+              </div>
+              <div class="panel-body">
+                  <div class="row">
+                      <div class="col-sm-7">
+                          <h3>Engagements</h3>
+                          <canvas id="history-chart"></canvas>
+                      </div>
+                      <div class="col-sm-5 border-left-1 text-center">
+                        <div class="row">
+                          <h3>Pen Test Reports</h3>
+                          <h4 class="">
+                              <i class="glyphicon glyphicon-exclamation-sign fa-5x"></i>
+                              <br>
+                              Balanced
+                          </h4>
+                          <h4 class="text-primary">Change your risk</h4>
+                          <div class="col-sm-6 border-top-1">
+                              Nr <br> AWS 2455
+                          </div>
+                          <div class="col-sm-6 border-top-1 border-left-1">
+                              Created <br> 11 Dec 2018
+                          </div>
+                        </div>
+                      </div>
+                  </div>
+              </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-3 col-sm-3">
+            <div class="panel panel-default box">
+              <div class="panel-heading text-center">
+                  <h2>Operating Systems</h2>
+              </div>
+              <div class="panel-body">
+                  <canvas id="chart-pie"></canvas>
+              </div>
+              <div class="panel-footer text-center">
+                  <h4><i class="fa fa-dot-circle-o"></i> Europe 45%</h4>
+                  <h4>Dummy Text</h4>
+              </div>
+            </div>
+        </div>
+        <div class="col-lg-9 col-sm-9">
+            <div class="panel panel-default box">
+              <div class="panel-heading text-center">
+                  <h2>Endpoints</h2>
+              </div>
+              <div class="panel-body">
+                  <div class="row">
+                      <div class="col-sm-7">
+                          <h3>Scheduled Scan</h3>
+                          <canvas id="chart-details"></canvas>
+                      </div>
+                      <div class="col-sm-5 border-left-1 text-center">
+                          <div class="row">
+                              <h3>Metrics</h3>
+                              <h4 class="">
+                                  <i class="fa fa-dot-circle-o fa-5x"></i>
+                                  <br>
+                                  Balanced
+                              </h4>
+                              <div class="col-sm-6 border-top-1">
+                                  Qty. <br> 45%
+                              </div>
+                              <div class="col-sm-6 border-top-1 border-left-1">
+                                  Price <br> $11,12
+                              </div>
+                              <br><br>
+                              <h2 class="text-primary">
+                              <small>Profit:</small>
+                              <br>
+                              +35.12%
+                              </h2>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="panel panel-default">
+                <div class="panel-heading text-center">
+                    <h2>Historical Finding Severity</h2>
+                </div>
+                <!-- /.panel-heading -->
+                <div class="panel-body">
+                    <canvas id="chart-area"></canvas>
+                </div>
+                <!-- /.panel-body -->
+            </div>
+            <!-- /.panel -->
+        </div>
+        <div class="col-lg-6">
+            <div class="panel panel-default">
+                <div class="panel-heading text-center">
+                    <h2>Reported Finding Severity by Month</h2>
+                </div>
+                <!-- /.panel-heading -->
+                <div class="panel-body">
+                    <div class="chart" id="line-chart"></div>
+                </div>
+                <!-- /.panel-body -->
+            </div>
+            <!-- /.panel -->
+        </div>
+    </div>
+    <div class="row">
+        {% if punchcard %}
+            <div class="col-lg-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        Weekly activity, displayed by day, of findings you reported.*
+                    </div>
+                    <div class="panel-body">
+                        <div class="chart" id="punchcard"></div>
+                        <p class="text-center text-muted small">Week begins on date displayed.</p>
+                        <p>
+                            <br/>
+                            <span class="text-muted small">* Weeks are only displayed if findings are available.</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+
+<!-- Modal of Quick Scan -->
+<div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Quick scan</h4>
+        </div>
+        <div class="modal-body">
+          <p class="modal-enabled">
+            Enabled
+              &nbsp; &nbsp;
+              <label class="switch">
+                  <input type="checkbox" checked><span class="slider round"></span>
+              </label>
+              &nbsp; &nbsp;
+            Disabled
+          </p>
+          <p>When it is enabled. It is doing an autonomous quick partial scan every day at 2pm.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+</div>
+
+
+{% endblock %}
+{% block postscript %}
+    <!-- Flot Charts JavaScript -->
+    <script src="{% static "flot/excanvas.min.js" %}"></script>
+    <script src="{% static "flot/jquery.flot.js" %}"></script>
+    <script src="{% static "flot/jquery.flot.pie.js" %}"></script>
+    <script src="{% static "flot/jquery.flot.time.js" %}"></script>
+    <script src="{% static "flot.tooltip/js/jquery.flot.tooltip.min.js" %}"></script>
+    <script src="{% static "flot/jquery.flot.stack.js" %}"></script>
+    <script src="{% static "flot/jquery.flot.resize.js" %}"></script>
+    {% if punchcard %}
+        <script src="{% static "JUMFlot/JUMFlot.min.js" %}"></script>
+        <script src="{% static "JUMFlot/jquery.flot.mouse.js" %}"></script>
+        <script src="{% static "JUMFlot/jquery.flot.bubbles.js" %}"></script>
+    {% endif %}
+    <script src="{% static "dojo/js/Chart.bundle.min.js" %}"></script>
+    <script src="{% static "dojo/js/utils.js" %}"></script>
+	<script>
+		var randomScalingFactor = function() {
+			return Math.round(Math.random() * 100);
+		};
+
+		var config = {
+			type: 'doughnut',
+			data: {
+				datasets: [{
+					data: [
+						randomScalingFactor(),
+						randomScalingFactor(),
+						randomScalingFactor(),
+						randomScalingFactor(),
+					],
+					backgroundColor: [
+						window.chartColors.red,
+						window.chartColors.orange,
+						window.chartColors.yellow,
+						window.chartColors.blue,
+					],
+					label: 'Dataset 1'
+				}],
+				labels: [
+					'Critical',
+					'High',
+					'Medium',
+					'Low',
+				]
+			},
+			options: {
+				responsive: true,
+				legend: {
+					position: 'top',
+                    labels: {
+					    fontColor: '#00FF24',
+                    }
+				},
+				title: {
+					display: false,
+					text: 'Title Here'
+				},
+				animation: {
+					animateScale: true,
+					animateRotate: true
+				}
+			}
+		};
+
+// history charts start
+
+		var MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+		var config2 = {
+			type: 'line',
+			data: {
+				labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+				datasets: [{
+					label: 'My First dataset',
+					borderColor: window.chartColors.blue,
+					backgroundColor: window.chartColors.blue,
+					data: [
+						randomScalingFactor(),
+						randomScalingFactor(),
+						randomScalingFactor(),
+						randomScalingFactor(),
+						randomScalingFactor(),
+						randomScalingFactor(),
+						randomScalingFactor()
+					],
+				}]
+			},
+			options: {
+				responsive: true,
+				title: {
+					display: false,
+					text: 'History'
+				},
+				tooltips: {
+					mode: 'index',
+				},
+				hover: {
+					mode: 'index'
+				},
+				scales: {
+					xAxes: [{
+						scaleLabel: {
+							display: true,
+							labelString: 'Month'
+						}
+					}],
+					yAxes: [{
+						stacked: true,
+						scaleLabel: {
+							display: true,
+							labelString: 'Value'
+						}
+					}]
+				}
+			}
+		};
+
+//chart pie
+
+		var config3 = {
+			type: 'pie',
+			data: {
+				datasets: [{
+					data: [
+						randomScalingFactor(),
+						randomScalingFactor(),
+						randomScalingFactor(),
+					],
+					backgroundColor: [
+						window.chartColors.red,
+						window.chartColors.orange,
+						window.chartColors.blue,
+					],
+					label: 'Dataset 1'
+				}],
+				labels: [
+					'Red',
+					'Orange',
+					'Blue',
+				]
+			},
+			options: {
+				responsive: true
+			}
+		};
+
+//chart details
+        var config4 = {
+            type: 'bar',
+            data: {
+                labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+                datasets: [{
+                    label: 'Dataset 1',
+                    backgroundColor: window.chartColors.red,
+                    stack: 'Stack 0',
+                    data: [
+                        randomScalingFactor(),
+                        randomScalingFactor(),
+                        randomScalingFactor(),
+                        randomScalingFactor(),
+                        randomScalingFactor(),
+                        randomScalingFactor(),
+                        randomScalingFactor()
+                    ]
+                }, {
+                    label: 'Dataset 2',
+                    backgroundColor: window.chartColors.blue,
+                    stack: 'Stack 0',
+                    data: [
+                        randomScalingFactor(),
+                        randomScalingFactor(),
+                        randomScalingFactor(),
+                        randomScalingFactor(),
+                        randomScalingFactor(),
+                        randomScalingFactor(),
+                        randomScalingFactor()
+                    ]
+                }, {
+                    label: 'Dataset 3',
+                    backgroundColor: window.chartColors.green,
+                    stack: 'Stack 1',
+                    data: [
+                        randomScalingFactor(),
+                        randomScalingFactor(),
+                        randomScalingFactor(),
+                        randomScalingFactor(),
+                        randomScalingFactor(),
+                        randomScalingFactor(),
+                        randomScalingFactor()
+                    ]
+                }]
+
+            },
+            options: {
+                title: {
+                    display: false,
+                    text: 'Chart.js Bar Chart - Stacked'
+                },
+                tooltips: {
+                    mode: 'index',
+                    intersect: false
+                },
+                responsive: true,
+                scales: {
+                    xAxes: [{
+                        stacked: true,
+                    }],
+                    yAxes: [{
+                        stacked: true
+                    }]
+                }
+            }
+        };
+
+
+		window.onload = function() {
+			var ctx = document.getElementById('chart-area').getContext('2d');
+			window.myDoughnut = new Chart(ctx, config);
+			var ctx2 = document.getElementById('history-chart').getContext('2d');
+			window.myLine = new Chart(ctx2, config2);
+			var ctx3 = document.getElementById('chart-pie').getContext('2d');
+			window.myPie = new Chart(ctx3, config3);
+			var ctx4 = document.getElementById('chart-details').getContext('2d');
+			window.myBar = new Chart(ctx4, config4);
+		};
+	</script>
+
+    <script>
+        var highest_count = {{ highest_count }};
+        $(function () {
+            var options = {
+                xaxes: [{
+                    mode: 'time'
+                }],
+                yaxes: [{
+                    min: 0
+                }],
+                series: {
+                    lines: {
+                        show: true
+                    },
+                    points: {
+                        show: true
+                    }
+                },
+                grid: {
+                    hoverable: true,
+                    borderWidth: 1,
+                    borderColor: '#00FF24',
+
+                },
+                tooltip: true,
+            };
+            chart_div();
+            severity_pie();
+
+            function chart_div() {
+                var critical = [],
+                        high = [],
+                        medium = [],
+                        low = [];
+
+                {% for month in by_month %}
+                    month = {{month|safe}};
+                    ttp = new Date(month['y'] + '-01').getTime();
+                    critical.push([ttp, month['a']]);
+                    high.push([ttp, month['b']]);
+                    medium.push([ttp, month['c']]);
+                    low.push([ttp, month['d']]);
+                {% endfor %}
+
+
+                var plotObj = $.plot($("#line-chart"), [{
+                            data: critical,
+                            label: " Critical",
+                            color: "#d9534f",
+                        }, {
+                            data: high,
+                            label: " High",
+                            color: '#f0ad4e',
+                        }, {
+                            data: medium,
+                            label: " Medium",
+                            color: '#f0de28',
+                        }, {
+                            data: low,
+                            label: " Low",
+                            color: '#337ab7',
+                        }],
+                        options);
+            }
+
+            function severity_pie() {
+                var data = [{
+                    label: "Critical",
+                    color: "#d9534f",
+                    data: {{critical}}
+                }, {
+                    label: "High",
+                    color: "#f0ad4e",
+                    data: {{high}}
+                }, {
+                    label: "Medium",
+                    color: "#f0de28",
+                    data: {{medium}}
+                }, {
+                    label: "Low",
+                    color: "#337ab7",
+                    data: {{low}}
+                }, {
+                    label: "Informational",
+                    color: "#E0E0E0",
+                    data: {{info}}
+                }];
+
+                var plotObj = $.plot($("#donut-chart"), data, {
+                    series: {
+                        pie: {
+                            innerRadius: 0.5,
+                            show: true,
+                            radius: 1,
+                            label: {
+                                show: false,
+                                radius: 2 / 3,
+                                formatter: function (label, series) {
+                                    return '<div style="font-size:8pt;text-align:center;padding:2px;color:#00FF24;z-index:9999;">' + label + '<br/>' + series.data[0][1] + '</div>';
+
+                                },
+
+                            }
+                        }
+                    },
+                    grid: {
+                        hoverable: true,
+                    },
+                });
+            }
+
+            {%  if punchcard %}
+
+                punchcard("#punchcard", {{ punchcard|safe }}, {{ ticks|safe }});
+
+            {%  endif %}
+
+        });
+
+    </script>
+
+{% endblock %}
